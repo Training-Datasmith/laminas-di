@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
  */
 class AutowireFactory implements AbstractFactoryInterface
 {
-    private GenericAutowireFactory $factory;
+    private readonly GenericAutowireFactory $factory;
 
     public function __construct(?GenericAutowireFactory $factory = null)
     {

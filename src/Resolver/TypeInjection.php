@@ -15,7 +15,7 @@ use const E_USER_DEPRECATED;
 /**
  * Wrapper for types that should be looked up for injection
  */
-final class TypeInjection implements InjectionInterface, Stringable
+final readonly class TypeInjection implements InjectionInterface, Stringable
 {
     /**
      * Constructor

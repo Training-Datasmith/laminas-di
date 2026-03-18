@@ -57,8 +57,6 @@ class InjectorGenerator
 
     private AutoloadGenerator $autoloadGenerator;
 
-    private LoggerInterface $logger;
-
     /**
      * Constructs the compiler instance
      *
@@ -73,12 +71,11 @@ class InjectorGenerator
         private ConfigInterface $config,
         DependencyResolverInterface $resolver,
         ?string $namespace = null,
-        ?LoggerInterface $logger = null
+        private ?LoggerInterface $logger = new NullLogger()
     ) {
         $this->namespace         = $namespace ? : 'Laminas\Di\Generated';
         $this->factoryGenerator  = new FactoryGenerator($config, $resolver, $this->namespace . '\Factory');
         $this->autoloadGenerator = new AutoloadGenerator($this->namespace);
-        $this->logger            = $logger ?? new NullLogger();
     }
 
     private function buildFromTemplate(string $templateFile, string $outputFile, array $replacements): void

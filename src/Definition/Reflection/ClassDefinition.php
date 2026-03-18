@@ -12,7 +12,7 @@ use ReflectionClass;
  */
 class ClassDefinition implements ClassDefinitionInterface
 {
-    private ReflectionClass $reflection;
+    private readonly ReflectionClass $reflection;
 
     /** @var array<string, Parameter>|null */
     private ?array $parameters = null;

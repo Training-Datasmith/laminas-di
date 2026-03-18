@@ -35,7 +35,7 @@ class LegacyConfig extends Config
      */
     public function __construct($config)
     {
-        parent::__construct([]);
+        parent::__construct();
 
         if ($config instanceof Traversable) {
             $config = ArrayUtils::iteratorToArray($config);
@@ -56,7 +56,7 @@ class LegacyConfig extends Config
      * @param iterable<mixed> $parameters
      * @return array<array-key, mixed>
      */
-    private function prepareParametersArray($parameters): array
+    private function prepareParametersArray(iterable $parameters): array
     {
         $prepared = [];
 
@@ -77,7 +77,7 @@ class LegacyConfig extends Config
      * @psalm-suppress MixedAssignment
      * @param iterable<mixed> $config
      */
-    private function configureInstance($config): void
+    private function configureInstance(iterable $config): void
     {
         /** @var mixed $data*/
         foreach ($config as $target => $data) {

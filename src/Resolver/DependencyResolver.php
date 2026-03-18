@@ -31,12 +31,6 @@ use function sprintf;
  */
 class DependencyResolver implements DependencyResolverInterface
 {
-    /** @var ConfigInterface */
-    protected $config;
-
-    /** @var DefinitionInterface */
-    protected $definition;
-
     /** @var ContainerInterface|null */
     protected $container;
 
@@ -60,10 +54,8 @@ class DependencyResolver implements DependencyResolverInterface
         'double'  => 'float',
     ];
 
-    public function __construct(DefinitionInterface $definition, ConfigInterface $config)
+    public function __construct(protected \Laminas\Di\Definition\DefinitionInterface $definition, protected \Laminas\Di\ConfigInterface $config)
     {
-        $this->definition = $definition;
-        $this->config     = $config;
     }
 
     private function getClassDefinition(string $type): ClassDefinitionInterface
@@ -197,7 +189,7 @@ class DependencyResolver implements DependencyResolverInterface
      *
      * @return $this
      */
-    public function setContainer(ContainerInterface $container)
+    public function setContainer(ContainerInterface $container): static
     {
         $this->container = $container;
         return $this;
@@ -371,7 +363,7 @@ class DependencyResolver implements DependencyResolverInterface
         $preference = $this->config->getTypePreference($type);
 
         if (! $preference || ! $this->isUsableType($preference, $type)) {
-            $preference = null;
+            return null;
         }
 
         return $preference;

@@ -91,7 +91,7 @@ class Config implements ConfigInterface
     protected $preferences = [];
 
     /** @var array<array> */
-    protected $types = [];
+    protected array $types;
 
     /**
      * Construct from options array
@@ -107,13 +107,10 @@ class Config implements ConfigInterface
         $this->preferences = $this->getDataFromArray($options, 'preferences');
 
         /** @psalm-var array<array> Psalm does not catch the array filter with type predicate */
-        $this->types = array_filter($this->getDataFromArray($options, 'types'), 'is_array');
+        $this->types = array_filter($this->getDataFromArray($options, 'types'), is_array(...));
     }
 
-    /**
-     * @param array|ArrayAccess $data
-     */
-    private function getDataFromArray($data, string $key): array
+    private function getDataFromArray(\ArrayAccess|array $data, string $key): array
     {
         /** @var mixed $result */
         $result = $data[$key] ?? [];
@@ -161,7 +158,7 @@ class Config implements ConfigInterface
      * @return $this
      * @param array<mixed> $params
      */
-    public function setParameters(string $type, array $params)
+    public function setParameters(string $type, array $params): static
     {
         $this->types[$type]['parameters'] = $params;
         return $this;
@@ -219,7 +216,7 @@ class Config implements ConfigInterface
      */
     public function getConfiguredTypeNames(): array
     {
-        return array_map('strval', array_keys($this->types));
+        return array_map(strval(...), array_keys($this->types));
     }
 
     public function setTypePreference(string $type, string $preference, ?string $context = null): self

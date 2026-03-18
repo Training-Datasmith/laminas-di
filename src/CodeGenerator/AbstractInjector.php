@@ -21,9 +21,9 @@ abstract class AbstractInjector implements InjectorInterface
     /** @var array<string, FactoryInterface> */
     private array $factoryInstances = [];
 
-    private ContainerInterface $container;
+    private readonly ContainerInterface $container;
 
-    public function __construct(private InjectorInterface $injector, ?ContainerInterface $container = null)
+    public function __construct(private readonly InjectorInterface $injector, ?ContainerInterface $container = null)
     {
         $this->container = $container ?: new DefaultContainer($this);
 
@@ -61,7 +61,10 @@ abstract class AbstractInjector implements InjectorInterface
 
     public function canCreate(string $name): bool
     {
-        return $this->hasFactory($name) || $this->injector->canCreate($name);
+        if ($this->hasFactory($name)) {
+            return true;
+        }
+        return $this->injector->canCreate($name);
     }
 
     private function hasFactory(string $name): bool

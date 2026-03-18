@@ -27,17 +27,14 @@ use function sprintf;
  */
 class Injector implements InjectorInterface
 {
-    /** @var DefinitionInterface */
-    protected $definition;
+    protected \Laminas\Di\Definition\DefinitionInterface $definition;
 
     /** @var ContainerInterface */
     protected $container;
 
-    /** @var DependencyResolverInterface */
-    protected $resolver;
+    protected \Laminas\Di\Resolver\DependencyResolverInterface $resolver;
 
-    /** @var ConfigInterface */
-    protected $config;
+    protected \Laminas\Di\ConfigInterface $config;
 
     /** @var string[] */
     protected $instantiationStack = [];
@@ -73,7 +70,7 @@ class Injector implements InjectorInterface
      *
      * @return $this
      */
-    public function setContainer(ContainerInterface $container)
+    public function setContainer(ContainerInterface $container): static
     {
         $this->resolver->setContainer($container);
         $this->container = $container;

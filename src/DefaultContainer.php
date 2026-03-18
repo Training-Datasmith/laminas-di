@@ -16,26 +16,20 @@ use Psr\Container\ContainerInterface;
 class DefaultContainer implements ContainerInterface
 {
     /**
-     * Dependency injector
-     *
-     * @var InjectorInterface
-     */
-    protected $injector;
-
-    /**
      * Registered services and cached values
      *
      * @var array<string, object>
      */
     protected $services = [];
 
-    public function __construct(InjectorInterface $injector)
+    public function __construct(/**
+     * Dependency injector
+     */
+    protected \Laminas\Di\InjectorInterface $injector)
     {
-        $this->injector = $injector;
-
-        $this->services[InjectorInterface::class]  = $injector;
+        $this->services[InjectorInterface::class]  = $this->injector;
         $this->services[ContainerInterface::class] = $this;
-        $this->services[$injector::class]          = $injector;
+        $this->services[$this->injector::class]          = $this->injector;
         $this->services[static::class]             = $this;
     }
 
@@ -57,9 +51,8 @@ class DefaultContainer implements ContainerInterface
      * @see ContainerInterface::has()
      *
      * @param string $name
-     * @return bool
      */
-    public function has($name)
+    public function has($name): bool
     {
         if (isset($this->services[$name])) {
             return true;

@@ -16,22 +16,16 @@ use ReflectionParameter;
  */
 class Parameter implements ParameterInterface
 {
-    /** @var ReflectionParameter */
-    protected $reflection;
-
-    public function __construct(ReflectionParameter $reflection)
+    public function __construct(protected \ReflectionParameter $reflection)
     {
-        $this->reflection = $reflection;
     }
 
     /**
      * {@inheritDoc}
      *
      * @see ParameterInterface::getDefault()
-     *
-     * @return mixed
      */
-    public function getDefault()
+    public function getDefault(): mixed
     {
         return $this->reflection->getDefaultValue();
     }

@@ -31,13 +31,11 @@ class ConfigFactory
      */
     public function create(ContainerInterface $container): ConfigInterface
     {
-        /** @var mixed $config */
         $config = $container->has('config') ? $container->get('config') : [];
 
         /** @var mixed $data */
         $data = $config['dependencies']['auto'] ?? [];
 
-        /** @var mixed $legacyData */
         $legacyData = $config['di'] ?? null;
 
         assert(is_array($data));
