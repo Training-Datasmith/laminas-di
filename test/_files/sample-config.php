@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use LaminasTest\Di\TestAsset;
 
 return [
@@ -13,21 +15,21 @@ return [
                 TestAsset\A::class => 'LocalA',
              ],
             'parameters' => [
-                'a' => '*'
-            ]
+                'a' => '*',
+            ],
         ],
         'SomeAlias' => [
             'typeOf' => TestAsset\Config\SomeClass::class,
             'preferences' => [
-                TestAsset\B::class => 'LocalB'
-            ]
-        ]
+                TestAsset\B::class => 'LocalB',
+            ],
+        ],
     ],
 
     'arbitaryKey' => 'value',
     'factories' => [
         'should be' => [
-            'ignored' => 'as well'
-        ]
-    ]
+            'ignored' => 'as well',
+        ],
+    ],
 ];

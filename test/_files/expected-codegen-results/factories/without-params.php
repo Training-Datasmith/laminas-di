@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace LaminasTest\Di\Generated\Factory\LaminasTest\Di\TestAsset;
 
-use Laminas\Di\CodeGenerator\FactoryInterface;
-use Psr\Container\ContainerInterface;
-
 use function is_array;
+
+use Laminas\Di\CodeGenerator\FactoryInterface;
+
+use Psr\Container\ContainerInterface;
 
 /**
  * @template-implements FactoryInterface<\LaminasTest\Di\TestAsset\A>

@@ -4,17 +4,11 @@ declare(strict_types=1);
 
 namespace Laminas\Di\Resolver;
 
-use Laminas\Di\ConfigInterface;
-use Laminas\Di\Definition\ClassDefinitionInterface;
-use Laminas\Di\Definition\DefinitionInterface;
-use Laminas\Di\Exception;
-use Psr\Container\ContainerInterface;
-use ReflectionClass;
-
 use function array_filter;
 use function array_merge;
 use function assert;
 use function class_exists;
+
 use function gettype;
 use function in_array;
 use function interface_exists;
@@ -22,6 +16,12 @@ use function is_callable;
 use function is_iterable;
 use function is_numeric;
 use function is_string;
+
+use Laminas\Di\Definition\ClassDefinitionInterface;
+use Laminas\Di\Exception;
+use Psr\Container\ContainerInterface;
+use ReflectionClass;
+
 use function sprintf;
 
 /**
@@ -101,7 +101,7 @@ class DependencyResolver implements DependencyResolverInterface
 
         // A type configuration may define a parameter should be auto resolved
         // even it was defined earlier
-        $params = array_filter($params, static fn($value): bool => $value !== '*');
+        $params = array_filter($params, static fn ($value): bool => $value !== '*');
 
         return $params;
     }

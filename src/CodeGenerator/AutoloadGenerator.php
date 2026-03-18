@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace Laminas\Di\CodeGenerator;
 
-use Laminas\Di\Exception\GenerateCodeException;
-use SplFileObject;
-use Throwable;
-
 use function array_keys;
 use function array_map;
 use function assert;
+
 use function file_get_contents;
 use function implode;
 use function is_string;
+
+use Laminas\Di\Exception\GenerateCodeException;
+use SplFileObject;
+
 use function sprintf;
 use function str_repeat;
 use function strtr;
+
+use Throwable;
+
 use function var_export;
 
 /**
@@ -67,7 +71,7 @@ class AutoloadGenerator
     private function generateClassmapCode(array &$classmap): string
     {
         $lines = array_map(
-            static fn(string $class, string $file): string => sprintf(
+            static fn (string $class, string $file): string => sprintf(
                 '%s => %s,',
                 var_export($class, true),
                 var_export($file, true)

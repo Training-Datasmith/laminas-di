@@ -7,7 +7,6 @@ namespace Laminas\Di\Definition\Reflection;
 use Laminas\Di\Definition\ParameterInterface;
 use Laminas\Di\Exception\UnsupportedReflectionTypeException;
 use ReflectionNamedType;
-use ReflectionParameter;
 
 /**
  * This class specifies a method parameter for the di definition

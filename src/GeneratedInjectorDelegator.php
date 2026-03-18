@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Laminas\Di;
 
-use Laminas\Di\Exception\InvalidServiceConfigException;
-use Psr\Container\ContainerInterface;
-
 use function class_exists;
 use function is_string;
+
+use Laminas\Di\Exception\InvalidServiceConfigException;
+use Psr\Container\ContainerInterface;
 
 /**
  * @final

@@ -4,25 +4,27 @@ declare(strict_types=1);
 
 namespace Laminas\Di\CodeGenerator;
 
-use Laminas\Di\CodeGenerator\AutoloadGenerator;
-use Laminas\Di\CodeGenerator\FactoryGenerator;
-use Laminas\Di\ConfigInterface;
-use Laminas\Di\Definition\DefinitionInterface;
-use Laminas\Di\Resolver\DependencyResolverInterface;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
-use SplFileObject;
-use Throwable;
-
 use function array_keys;
 use function array_map;
 use function assert;
 use function file_get_contents;
 use function implode;
 use function is_string;
+
+use Laminas\Di\ConfigInterface;
+
+use Laminas\Di\Definition\DefinitionInterface;
+use Laminas\Di\Resolver\DependencyResolverInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+use SplFileObject;
+
 use function sprintf;
 use function str_repeat;
 use function strtr;
+
+use Throwable;
+
 use function var_export;
 
 /**
@@ -73,7 +75,7 @@ class InjectorGenerator
         ?string $namespace = null,
         private ?LoggerInterface $logger = new NullLogger()
     ) {
-        $this->namespace         = $namespace ? : 'Laminas\Di\Generated';
+        $this->namespace         = $namespace ?: 'Laminas\Di\Generated';
         $this->factoryGenerator  = new FactoryGenerator($config, $resolver, $this->namespace . '\Factory');
         $this->autoloadGenerator = new AutoloadGenerator($this->namespace);
     }
@@ -111,7 +113,7 @@ class InjectorGenerator
     {
         $indentation = sprintf("\n%s", str_repeat(' ', self::INDENTATION_SPACES));
         $codeLines   = array_map(
-            static fn(string $key, string $value): string =>
+            static fn (string $key, string $value): string =>
                 sprintf('%s => %s,', var_export($key, true), var_export($value, true)),
             array_keys($factories),
             $factories
@@ -152,7 +154,7 @@ class InjectorGenerator
 
     private function generateAutoload(): void
     {
-        $addFactoryPrefix = static fn(string $value): string => 'Factory/' . $value;
+        $addFactoryPrefix = static fn (string $value): string => 'Factory/' . $value;
 
         $classmap = array_map($addFactoryPrefix, $this->factoryGenerator->getClassmap());
 

@@ -1,13 +1,15 @@
 <?php
+
 // phpcs:ignoreFile
 declare(strict_types=1);
 
 namespace Laminas\Di\Resolver;
 
-use function sprintf;
-use function trigger_error;
-
 use const E_USER_DEPRECATED;
+
+use function sprintf;
+
+use function trigger_error;
 
 trigger_error(
     sprintf(

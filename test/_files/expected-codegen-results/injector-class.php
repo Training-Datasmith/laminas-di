@@ -12,7 +12,7 @@ use Laminas\Di\CodeGenerator\AbstractInjector;
 
 class GeneratedInjector extends AbstractInjector
 {
-    protected function loadFactoryList() : void
+    protected function loadFactoryList(): void
     {
         $this->factories = include __DIR__ . '/factories.php';
     }

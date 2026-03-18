@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace LaminasTest\Di\Resolver;
 
+use const E_USER_DEPRECATED;
+
 use Laminas\Di\Resolver\AbstractInjection;
 use Laminas\Di\Resolver\InjectionInterface;
+
 use PHPUnit\Framework\TestCase;
 
 use function restore_error_handler;
 use function set_error_handler;
-use function sprintf;
 
-use const E_USER_DEPRECATED;
+use function sprintf;
 
 final class AbstractInjectionTest extends TestCase
 {
@@ -33,8 +35,7 @@ final class AbstractInjectionTest extends TestCase
         }, E_USER_DEPRECATED);
 
         try {
-            new class () extends AbstractInjection
-            {
+            new class () extends AbstractInjection {
                 public function export(): string
                 {
                     return '';

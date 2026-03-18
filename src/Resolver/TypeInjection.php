@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Laminas\Di\Resolver;
 
+use const E_USER_DEPRECATED;
+
 use Psr\Container\ContainerInterface;
+
 use Stringable;
 
 use function trigger_error;
-use function var_export;
 
-use const E_USER_DEPRECATED;
+use function var_export;
 
 /**
  * Wrapper for types that should be looked up for injection

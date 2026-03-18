@@ -4,19 +4,24 @@ declare(strict_types=1);
 
 namespace Laminas\Di\Container;
 
+use function array_merge_recursive;
+
 use ArrayAccess;
+
+use function assert;
+
+use const E_USER_DEPRECATED;
+
+use function is_array;
+
+use function is_iterable;
+
 use Laminas\Di\Config;
 use Laminas\Di\ConfigInterface;
 use Laminas\Di\LegacyConfig;
 use Psr\Container\ContainerInterface;
 
-use function array_merge_recursive;
-use function assert;
-use function is_array;
-use function is_iterable;
 use function trigger_error;
-
-use const E_USER_DEPRECATED;
 
 /**
  * Factory implementation for creating the definition list

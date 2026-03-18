@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaminasTest\Di;
 
+use function array_map;
+
 use Laminas\Di\Config;
 use Laminas\Di\DefaultContainer;
 use Laminas\Di\Definition\DefinitionInterface;
@@ -21,9 +23,9 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use RuntimeException;
 use stdClass;
+
 use TypeError;
 
-use function array_map;
 use function uniqid;
 
 #[CoversClass(Injector::class)]
@@ -189,7 +191,7 @@ final class InjectorTest extends TestCase
             'selfOptional' => TestAsset\CircularClasses\Y::class,
         ];
 
-        return array_map(static fn($class): array => [$class], $classes);
+        return array_map(static fn ($class): array => [$class], $classes);
     }
 
     #[DataProvider('provideCircularClasses')]
@@ -224,8 +226,8 @@ final class InjectorTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
 
         // Mocks a container that always creates new instances
-        $container->method('has')->willReturnCallback(static fn(string $class): bool => $injector->canCreate($class));
-        $container->method('get')->willReturnCallback(static fn(string $class): object => $injector->create($class));
+        $container->method('has')->willReturnCallback(static fn (string $class): bool => $injector->canCreate($class));
+        $container->method('get')->willReturnCallback(static fn (string $class): object => $injector->create($class));
 
         $injector->setContainer($container);
 

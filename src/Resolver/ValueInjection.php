@@ -4,18 +4,23 @@ declare(strict_types=1);
 
 namespace Laminas\Di\Resolver;
 
-use Laminas\Di\Exception\LogicException;
-use Psr\Container\ContainerInterface;
-use ReflectionMethod;
+use const E_USER_DEPRECATED;
 
 use function is_array;
 use function is_object;
-use function is_scalar;
-use function method_exists;
-use function trigger_error;
-use function var_export;
 
-use const E_USER_DEPRECATED;
+use function is_scalar;
+
+use Laminas\Di\Exception\LogicException;
+
+use function method_exists;
+
+use Psr\Container\ContainerInterface;
+use ReflectionMethod;
+
+use function trigger_error;
+
+use function var_export;
 
 /**
  * Wrapper for values that should be directly injected

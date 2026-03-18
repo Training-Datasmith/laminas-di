@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace LaminasTest\Di\Resolver;
 
+use function array_keys;
+use function array_merge;
+use function array_shift;
+
 use ArrayIterator;
 use ArrayObject;
+
+use function basename;
+use function glob;
+
 use IteratorAggregate;
 use Laminas\Di\Config;
 use Laminas\Di\ConfigInterface;
@@ -19,17 +27,13 @@ use Laminas\Di\Resolver\TypeInjection;
 use Laminas\Di\Resolver\ValueInjection;
 use LaminasTest\Di\TestAsset;
 use PHPUnit\Framework\Attributes\CoversClass;
+
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use stdClass;
 use Traversable;
 
-use function array_keys;
-use function array_merge;
-use function array_shift;
-use function basename;
-use function glob;
 use function uniqid;
 
 #[CoversClass(DependencyResolver::class)]
@@ -135,7 +139,7 @@ final class DependencyResolverTest extends TestCase
                 ));
         }
 
-        $mock->method('hasClass')->willReturnCallback(static fn($class): bool => isset($definition[$class]));
+        $mock->method('hasClass')->willReturnCallback(static fn ($class): bool => isset($definition[$class]));
 
         return $mock;
     }
@@ -362,18 +366,16 @@ final class DependencyResolverTest extends TestCase
             'boolFalse'                 => ['bool',             true,                          true],
             'iterableArray'             => ['iterable',         [],                            true],
             'iterableIterator'          => ['iterable',         new ArrayIterator([]),         true],
-            'iterableIteratorAggregate' => ['iterable',         new class implements IteratorAggregate
-            {
+            'iterableIteratorAggregate' => ['iterable',         new class () implements IteratorAggregate {
                 public function getIterator(): Traversable
                 {
                     return new ArrayIterator([]);
                 }
             }, true],
-            'callableClosure'           => ['callable',         static function () : void {
+            'callableClosure'           => ['callable',         static function (): void {
             }, true],
             'callableString'            => ['callable',         'trim',                        true],
-            'callableObject'            => ['callable',         new class
-            {
+            'callableObject'            => ['callable',         new class () {
                 public function __invoke()
                 {
                 }

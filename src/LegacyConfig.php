@@ -4,21 +4,27 @@ declare(strict_types=1);
 
 namespace Laminas\Di;
 
-use ArrayAccess;
-use Laminas\Stdlib\ArrayUtils;
-use Laminas\Stdlib\Parameters;
-use Traversable;
-
 use function array_pop;
+
+use ArrayAccess;
+
 use function assert;
 use function class_exists;
+
+use const E_USER_DEPRECATED;
+
 use function is_array;
 use function is_iterable;
 use function is_string;
-use function str_contains;
-use function trigger_error;
 
-use const E_USER_DEPRECATED;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Stdlib\Parameters;
+
+use function str_contains;
+
+use Traversable;
+
+use function trigger_error;
 
 /**
  * Provides a migration config from laminas-di 2.x configuration arrays

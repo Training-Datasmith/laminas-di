@@ -21,7 +21,7 @@ class AutowireFactory implements AbstractFactoryInterface
 
     public function __construct(?GenericAutowireFactory $factory = null)
     {
-        $this->factory = $factory ? : new GenericAutowireFactory();
+        $this->factory = $factory ?: new GenericAutowireFactory();
     }
 
     /**

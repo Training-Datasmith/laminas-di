@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace LaminasTest\Di\Definition\Reflection;
 
+use function array_values;
+use function assert;
+
 use Laminas\Di\Definition\ParameterInterface;
 use Laminas\Di\Definition\Reflection\ClassDefinition;
 use LaminasTest\Di\TestAsset\ClassDefinitionRedundantUaSortTestDependency;
@@ -12,11 +15,10 @@ use LaminasTest\Di\TestAsset\Hierarchy as HierarchyAsset;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+
 use ReflectionClass;
 use ReflectionParameter;
 
-use function array_values;
-use function assert;
 use function sort;
 use function uasort;
 

@@ -10,7 +10,7 @@ namespace LaminasTest\Di\Generated;
 
 require_once __DIR__ . '/Autoloader.php';
 
-return (function(): Autoloader {
+return (function (): Autoloader {
     $autoloader = new Autoloader();
     $autoloader->register();
 

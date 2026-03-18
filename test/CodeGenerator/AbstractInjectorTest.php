@@ -43,8 +43,7 @@ final class AbstractInjectorTest extends TestCase
         $injector  = $this->decoratedInjector;
         $container = $withContainer ? $this->container : null;
 
-        return new class ($factoriesProvider, $injector, $container) extends AbstractInjector
-        {
+        return new class ($factoriesProvider, $injector, $container) extends AbstractInjector {
             /** @var callable():array<string, class-string<FactoryInterface>|FactoryInterface> */
             private $provider;
 
@@ -84,7 +83,7 @@ final class AbstractInjectorTest extends TestCase
     public function testCanCreateReturnsTrueWhenAFactoryIsAvailable(): void
     {
         $className = uniqid('SomeClass');
-        $provider  = static fn(): array => [$className => 'SomeClassFactory'];
+        $provider  = static fn (): array => [$className => 'SomeClassFactory'];
 
         $this->decoratedInjector
             ->expects(self::never())
@@ -99,7 +98,7 @@ final class AbstractInjectorTest extends TestCase
     {
         $missingClass  = uniqid('SomeClass');
         $existingClass = 'stdClass';
-        $provider      = static fn(): array => [];
+        $provider      = static fn (): array => [];
 
         $this->decoratedInjector
             ->expects(self::exactly(2))
@@ -122,7 +121,7 @@ final class AbstractInjectorTest extends TestCase
         $className = uniqid('SomeClass');
         $params    = ['someArg' => uniqid()];
         $expected  = new stdClass();
-        $provider  = static fn(): array => [$className => $factory];
+        $provider  = static fn (): array => [$className => $factory];
 
         $factory
             ->expects(self::once())
@@ -144,7 +143,7 @@ final class AbstractInjectorTest extends TestCase
         $className = uniqid('SomeClass');
         $expected  = new stdClass();
         $params    = ['someArg' => uniqid()];
-        $provider  = static fn(): array => [];
+        $provider  = static fn (): array => [];
 
         $this->decoratedInjector
             ->expects(self::once())
@@ -161,7 +160,7 @@ final class AbstractInjectorTest extends TestCase
         $factory   = $this->createMock(FactoryInterface::class);
         $className = uniqid('SomeClass');
         $expected  = new stdClass();
-        $provider  = static fn(): array => [$className => $factory];
+        $provider  = static fn (): array => [$className => $factory];
 
         $factory
             ->expects(self::once())
@@ -175,7 +174,7 @@ final class AbstractInjectorTest extends TestCase
 
     public function testFactoryIsCreatedFromClassNameString(): void
     {
-        $subject = $this->createTestSubject(static fn(): array => ['SomeClass' => StdClassFactory::class]);
+        $subject = $this->createTestSubject(static fn (): array => ['SomeClass' => StdClassFactory::class]);
 
         $factoryInstancesProperty = new ReflectionProperty(AbstractInjector::class, 'factoryInstances');
         $factoriesProperty        = new ReflectionProperty(AbstractInjector::class, 'factories');

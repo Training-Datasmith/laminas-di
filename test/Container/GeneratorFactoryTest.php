@@ -37,7 +37,7 @@ final class GeneratorFactoryTest extends TestCase
     public function testFactoryUsesDiConfigContainer(): void
     {
         $container = $this->createMock(ContainerInterface::class);
-        $container->method('has')->willReturnCallback(static fn($type): bool => $type === ConfigInterface::class);
+        $container->method('has')->willReturnCallback(static fn ($type): bool => $type === ConfigInterface::class);
 
         $container->expects($this->atLeastOnce())
             ->method('get')

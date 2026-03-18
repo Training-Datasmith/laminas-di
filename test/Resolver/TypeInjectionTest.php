@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaminasTest\Di\Resolver;
 
+use const E_USER_DEPRECATED;
+
 use Laminas\Di\Resolver\InjectionInterface;
 use Laminas\Di\Resolver\TypeInjection;
 use Laminas\Di\Resolver\ValueInjection;
@@ -11,14 +13,14 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use stdClass;
 
 use function restore_error_handler;
 use function set_error_handler;
 use function sprintf;
-use function uniqid;
 
-use const E_USER_DEPRECATED;
+use stdClass;
+
+use function uniqid;
 
 #[CoversClass(TypeInjection::class)]
 final class TypeInjectionTest extends TestCase

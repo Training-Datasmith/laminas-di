@@ -17,8 +17,7 @@ final class GeneratorTraitTest extends TestCase
         $this->expectException(GenerateCodeException::class);
         $this->expectExceptionMessage('Could not create output directory: ' . $invalidDir);
 
-        new class (__DIR__, $invalidDir)
-        {
+        new class (__DIR__, $invalidDir) {
             use GeneratorTrait;
 
             public function __construct(string $dir, string $otherDir)

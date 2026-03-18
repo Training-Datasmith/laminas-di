@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Laminas\Di\CodeGenerator;
 
+use function assert;
+use function is_dir;
+
+use function is_string;
+
 use Laminas\Di\Exception\GenerateCodeException;
 use Laminas\Di\Exception\LogicException;
 
-use function assert;
-use function is_dir;
-use function is_string;
 use function mkdir;
 use function sprintf;
 

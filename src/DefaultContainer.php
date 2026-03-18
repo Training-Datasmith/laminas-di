@@ -25,8 +25,8 @@ class DefaultContainer implements ContainerInterface
     public function __construct(/**
      * Dependency injector
      */
-    protected \Laminas\Di\InjectorInterface $injector)
-    {
+        protected \Laminas\Di\InjectorInterface $injector
+    ) {
         $this->services[InjectorInterface::class]  = $this->injector;
         $this->services[ContainerInterface::class] = $this;
         $this->services[$this->injector::class]          = $this->injector;

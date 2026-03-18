@@ -4,25 +4,32 @@ declare(strict_types=1);
 
 namespace LaminasTest\Di\Resolver;
 
+use const E_USER_DEPRECATED;
+
+use function fclose;
+use function fopen;
+
 use Laminas\Di\Exception;
 use Laminas\Di\Resolver\InjectionInterface;
 use Laminas\Di\Resolver\ValueInjection;
 use LaminasTest\Di\TestAsset;
+
+use function microtime;
+
 use PHPUnit\Framework\Attributes\CoversClass;
+
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use stdClass;
 
-use function fclose;
-use function fopen;
-use function microtime;
 use function restore_error_handler;
 use function set_error_handler;
-use function time;
-use function uniqid;
 
-use const E_USER_DEPRECATED;
+use stdClass;
+
+use function time;
+
+use function uniqid;
 
 #[CoversClass(ValueInjection::class)]
 final class ValueInjectionTest extends TestCase

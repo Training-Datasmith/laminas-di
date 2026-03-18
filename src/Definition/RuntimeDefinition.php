@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Laminas\Di\Definition;
 
-use Laminas\Di\Definition\Reflection\ClassDefinition;
-use Laminas\Di\Exception;
-
 use function array_keys;
 use function array_merge;
+
 use function class_exists;
+
+use Laminas\Di\Definition\Reflection\ClassDefinition;
+use Laminas\Di\Exception;
 
 /**
  * Class definitions based on runtime reflection

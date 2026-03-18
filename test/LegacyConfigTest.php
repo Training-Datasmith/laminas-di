@@ -5,19 +5,23 @@ declare(strict_types=1);
 namespace LaminasTest\Di;
 
 use ArrayIterator;
+
+use const E_USER_DEPRECATED;
+
 use GlobIterator;
 use Laminas\Di\Exception;
 use Laminas\Di\LegacyConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use SplFileInfo;
-use stdClass;
 
 use function restore_error_handler;
+
 use function set_error_handler;
 
-use const E_USER_DEPRECATED;
+use SplFileInfo;
+
+use stdClass;
 
 #[CoversClass(LegacyConfig::class)]
 final class LegacyConfigTest extends TestCase

@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace LaminasTest\Di\Container;
 
+use const E_USER_DEPRECATED;
+
 use Laminas\Di\ConfigInterface;
 use Laminas\Di\Container\ConfigFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+
 use Psr\Container\ContainerInterface;
 
 use function restore_error_handler;
 use function set_error_handler;
 use function strstr;
-use function uniqid;
 
-use const E_USER_DEPRECATED;
+use function uniqid;
 
 #[CoversClass(ConfigFactory::class)]
 final class ConfigFactoryTest extends TestCase

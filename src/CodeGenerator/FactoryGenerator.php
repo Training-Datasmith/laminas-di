@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace Laminas\Di\CodeGenerator;
 
-use Laminas\Di\ConfigInterface;
-use Laminas\Di\Exception\RuntimeException;
-use Laminas\Di\Resolver\DependencyResolverInterface;
-use Laminas\Di\Resolver\InjectionInterface;
-use Laminas\Di\Resolver\TypeInjection;
-use SplFileObject;
-
 use function assert;
 use function dirname;
 use function file_get_contents;
 use function implode;
 use function is_string;
+
+use Laminas\Di\ConfigInterface;
+
+use Laminas\Di\Exception\RuntimeException;
+use Laminas\Di\Resolver\DependencyResolverInterface;
+use Laminas\Di\Resolver\InjectionInterface;
+use Laminas\Di\Resolver\TypeInjection;
+
 use function preg_replace;
+
+use SplFileObject;
+
 use function sprintf;
 use function str_repeat;
 use function str_replace;

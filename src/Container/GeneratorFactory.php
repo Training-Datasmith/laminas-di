@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Laminas\Di\Container;
 
+use function assert;
+use function is_string;
+
 use Laminas\Di\CodeGenerator\InjectorGenerator;
 use Laminas\Di\ConfigInterface;
 use Laminas\Di\Definition\RuntimeDefinition;
 use Laminas\Di\Resolver\DependencyResolver;
+
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-
-use function assert;
-use function is_string;
 
 /**
  * @deprecated Since 3.16.0, the code generator will be replaced by a separate package in version 4.0

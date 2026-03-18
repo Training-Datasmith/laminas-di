@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaminasTest\Di\Definition\Reflection;
 
+use function assert;
+
 use Laminas\Di\Definition\Reflection\Parameter;
 use Laminas\Di\Exception\UnsupportedReflectionTypeException;
 use LaminasTest\Di\TestAsset;
@@ -12,9 +14,8 @@ use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
-use ReflectionParameter;
 
-use function assert;
+use ReflectionParameter;
 
 /**
  * Parameter test case.

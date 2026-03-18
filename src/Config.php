@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Laminas\Di;
 
-use ArrayAccess;
-
 use function array_filter;
+
 use function array_keys;
 use function array_map;
+
+use ArrayAccess;
+
 use function class_exists;
 use function interface_exists;
 use function is_array;

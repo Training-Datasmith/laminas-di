@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace Laminas\Di;
 
+use function array_pop;
+use function class_exists;
+use function implode;
+use function in_array;
+
 use Laminas\Di\Definition\DefinitionInterface;
 use Laminas\Di\Exception\ClassNotFoundException;
 use Laminas\Di\Exception\InvalidCallbackException;
 use Laminas\Di\Exception\RuntimeException;
 use Laminas\Di\Resolver\DependencyResolverInterface;
+
 use Laminas\Di\Resolver\InjectionInterface;
 use Laminas\Di\Resolver\TypeInjection;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-use function array_pop;
-use function class_exists;
-use function implode;
-use function in_array;
 use function sprintf;
 
 /**
@@ -187,7 +189,7 @@ class Injector implements InjectorInterface
         $containerTypes = [
             ContainerInterface::class,
             // Be backwards compatible with interop/container:
-            'Interop\Container\ContainerInterface', // phpcs:ignore 
+            'Interop\Container\ContainerInterface', // phpcs:ignore
         ];
 
         if (
