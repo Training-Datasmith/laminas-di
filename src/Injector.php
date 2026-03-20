@@ -63,6 +63,11 @@ class Injector implements Injector_Interface
         $this->container = $container;
         return $this;
     }
+    /**
+     * Return the PSR-11 container used to retrieve pre-built dependency instances.
+     *
+     * @return Container_Interface The currently configured IoC container.
+     */
     public function get_container(): Container_Interface
     {
         return $this->container;
