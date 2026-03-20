@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di;
 
 /**
@@ -14,7 +13,7 @@ namespace Laminas\Di;
  *  abstract_factories: list<callable|class-string>
  * }
  */
-class ConfigProvider
+class Config_Provider
 {
     /**
      * Implements the config provider
@@ -23,33 +22,20 @@ class ConfigProvider
      */
     public function __invoke(): array
     {
-        return [
-            'dependencies' => $this->getDependencyConfig(),
-        ];
+        return ['dependencies' => $this->get_dependency_config()];
     }
-
     /**
      * Returns the dependency (service manager) configuration
      *
      * @return DependencyConfigArray
      */
-    public function getDependencyConfig(): array
+    public function get_dependency_config(): array
     {
         return [
             // Legacy Zend Framework aliases
-            'aliases'            => [
-                'Zend\Di\InjectorInterface'               => InjectorInterface::class,
-                'Zend\Di\ConfigInterface'                 => ConfigInterface::class,
-                'Zend\Di\CodeGenerator\InjectorGenerator' => CodeGenerator\InjectorGenerator::class,
-            ],
-            'factories'          => [
-                InjectorInterface::class               => Container\InjectorFactory::class,
-                ConfigInterface::class                 => Container\ConfigFactory::class,
-                CodeGenerator\InjectorGenerator::class => Container\GeneratorFactory::class,
-            ],
-            'abstract_factories' => [
-                Container\ServiceManager\AutowireFactory::class,
-            ],
+            'aliases' => ['Zend\Di\InjectorInterface' => Injector_Interface::class, 'Zend\Di\ConfigInterface' => Config_Interface::class, 'Zend\Di\CodeGenerator\InjectorGenerator' => Code_Generator\Injector_Generator::class],
+            'factories' => [Injector_Interface::class => Container\Injector_Factory::class, Config_Interface::class => Container\Config_Factory::class, Code_Generator\Injector_Generator::class => Container\Generator_Factory::class],
+            'abstract_factories' => [Container\Service_Manager\Autowire_Factory::class],
         ];
     }
 }

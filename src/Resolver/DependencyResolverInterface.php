@@ -1,19 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di\Resolver;
 
-use Laminas\Di\Exception\MissingPropertyException;
-use Psr\Container\ContainerInterface;
-
+use Laminas\Di\Exception\Missing_Property_Exception;
+use Psr\Container\Container_Interface;
 /**
  * Interface for implementing dependency resolvers
  *
  * The dependency resolver is used by the dependency injector or the
  * code generator to gather the types and values to inject
  */
-interface DependencyResolverInterface
+interface Dependency_Resolver_Interface
 {
     /**
      * Set the ioc container
@@ -22,8 +20,7 @@ interface DependencyResolverInterface
      *     checking for instances
      * @return self Should provide a fluent interface
      */
-    public function setContainer(ContainerInterface $container);
-
+    public function set_container(Container_Interface $container);
     /**
      * Resolve a type prefernece
      *
@@ -34,8 +31,7 @@ interface DependencyResolverInterface
      * @return null|string Returns the preferred type name or null if there is no
      *     preference
      */
-    public function resolvePreference(string $type, ?string $context = null): ?string;
-
+    public function resolve_preference(string $type, ?string $context = null): ?string;
     /**
      * Resolves all parameters for injection
      *
@@ -45,5 +41,5 @@ interface DependencyResolverInterface
      *     array contains either TypeInjection or ValueInjection instances
      * @throws MissingPropertyException  When a parameter could not be resolved.
      */
-    public function resolveParameters(string $requestedType, array $callTimeParameters = []): array;
+    public function resolve_parameters(string $requested_type, array $call_time_parameters = []): array;
 }

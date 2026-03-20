@@ -1,19 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di;
 
 /**
  * Interface that defines the dependency injector
  */
-interface InjectorInterface
+interface Injector_Interface
 {
     /**
      * Check if this dependency injector can handle the given class
      */
-    public function canCreate(string $name): bool;
-
+    public function can_create(string $name): bool;
     /**
      * Create a new instance of a class or alias
      *

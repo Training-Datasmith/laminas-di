@@ -1,54 +1,48 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di\Definition\Reflection;
 
-use Laminas\Di\Definition\ParameterInterface;
-use Laminas\Di\Exception\UnsupportedReflectionTypeException;
+use Laminas\Di\Definition\Parameter_Interface;
+use Laminas\Di\Exception\Unsupported_Reflection_Type_Exception;
 use ReflectionNamedType;
-
 /**
  * This class specifies a method parameter for the di definition
  *
  * @final
  */
-class Parameter implements ParameterInterface
+class Parameter implements Parameter_Interface
 {
     public function __construct(protected \ReflectionParameter $reflection)
     {
     }
-
     /**
      * {@inheritDoc}
      *
      * @see ParameterInterface::getDefault()
      */
-    public function getDefault(): mixed
+    public function get_default(): mixed
     {
-        return $this->reflection->getDefaultValue();
+        return $this->reflection->get_default_value();
     }
-
     /**
      * {@inheritDoc}
      *
      * @see ParameterInterface::getName()
      */
-    public function getName(): string
+    public function get_name(): string
     {
-        return $this->reflection->getName();
+        return $this->reflection->get_name();
     }
-
     /**
      * {@inheritDoc}
      *
      * @see ParameterInterface::getPosition()
      */
-    public function getPosition(): int
+    public function get_position(): int
     {
-        return $this->reflection->getPosition();
+        return $this->reflection->get_position();
     }
-
     /**
      * {@inheritDoc}
      *
@@ -56,31 +50,26 @@ class Parameter implements ParameterInterface
      *
      * @throws UnsupportedReflectionTypeException
      */
-    public function getType(): ?string
+    public function get_type(): ?string
     {
-        $type = $this->reflection->getType();
-
-        if (! $type) {
+        $type = $this->reflection->get_type();
+        if (!$type) {
             return null;
         }
-
-        if (! $type instanceof ReflectionNamedType) {
-            throw UnsupportedReflectionTypeException::fromUnionOrIntersectionType($type);
+        if (!$type instanceof ReflectionNamedType) {
+            throw Unsupported_Reflection_Type_Exception::from_union_or_intersection_type($type);
         }
-
-        return $type->getName();
+        return $type->get_name();
     }
-
     /**
      * {@inheritDoc}
      *
      * @see ParameterInterface::isRequired()
      */
-    public function isRequired(): bool
+    public function is_required(): bool
     {
-        return ! $this->reflection->isOptional();
+        return !$this->reflection->is_optional();
     }
-
     /**
      * {@inheritDoc}
      *
@@ -88,18 +77,15 @@ class Parameter implements ParameterInterface
      *
      * @throws UnsupportedReflectionTypeException
      */
-    public function isBuiltin(): bool
+    public function is_builtin(): bool
     {
-        $type = $this->reflection->getType();
-
-        if (! $type) {
+        $type = $this->reflection->get_type();
+        if (!$type) {
             return false;
         }
-
-        if (! $type instanceof ReflectionNamedType) {
-            throw UnsupportedReflectionTypeException::fromUnionOrIntersectionType($type);
+        if (!$type instanceof ReflectionNamedType) {
+            throw Unsupported_Reflection_Type_Exception::from_union_or_intersection_type($type);
         }
-
-        return $type->isBuiltin();
+        return $type->is_builtin();
     }
 }

@@ -1,25 +1,13 @@
 <?php
 
 // phpcs:ignoreFile
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di\Resolver;
 
 use const E_USER_DEPRECATED;
-
 use function sprintf;
-
 use function trigger_error;
-
-trigger_error(
-    sprintf(
-        '%s is deprecated, please migrate to %s',
-        AbstractInjection::class,
-        InjectionInterface::class
-    ),
-    E_USER_DEPRECATED
-);
-
+trigger_error(sprintf('%s is deprecated, please migrate to %s', Abstract_Injection::class, Injection_Interface::class), E_USER_DEPRECATED);
 /**
  * @deprecated Since 3.1.0
  *
@@ -27,22 +15,18 @@ trigger_error(
  *
  * @codeCoverageIgnore Deprecated
  */
-abstract class AbstractInjection
+abstract class Abstract_Injection
 {
-    private string $parameterName;
-
-    public function setParameterName(string $name): self
+    private string $parameter_name;
+    public function set_parameter_name(string $name): self
     {
-        $this->parameterName = $name;
+        $this->parameter_name = $name;
         return $this;
     }
-
-    public function getParameterName(): string
+    public function get_parameter_name(): string
     {
-        return $this->parameterName;
+        return $this->parameter_name;
     }
-
     abstract public function export(): string;
-
-    abstract public function isExportable(): bool;
+    abstract public function is_exportable(): bool;
 }

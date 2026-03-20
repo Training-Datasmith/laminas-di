@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di\Exception;
 
 use LogicException as BaseLogicException;
-
-class LogicException extends BaseLogicException implements ExceptionInterface
+class LogicException extends Base_Logic_Exception implements Exception_Interface
 {
 }

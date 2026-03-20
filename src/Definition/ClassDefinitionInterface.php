@@ -1,27 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di\Definition;
 
 use ReflectionClass;
-
-interface ClassDefinitionInterface
+interface Class_Definition_Interface
 {
-    public function getReflection(): ReflectionClass;
-
+    public function get_reflection(): ReflectionClass;
     /**
      * @return string[]
      */
-    public function getSupertypes(): array;
-
+    public function get_supertypes(): array;
     /**
      * @return string[]
      */
-    public function getInterfaces(): array;
-
+    public function get_interfaces(): array;
     /**
      * @return ParameterInterface[]
      */
-    public function getParameters(): array;
+    public function get_parameters(): array;
 }

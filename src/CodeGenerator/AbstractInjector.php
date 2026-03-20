@@ -1,77 +1,62 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Di\Code_Generator;
 
-namespace Laminas\Di\CodeGenerator;
-
-use Laminas\Di\DefaultContainer;
-use Laminas\Di\InjectorInterface;
-use Psr\Container\ContainerInterface;
-
+use Laminas\Di\Default_Container;
+use Laminas\Di\Injector_Interface;
+use Psr\Container\Container_Interface;
 /**
  * Abstract class for code generated dependency injectors
  *
  * @deprecated Since 3.16.0, the code generator will be replaced by a separate package in version 4.0
  */
-abstract class AbstractInjector implements InjectorInterface
+abstract class Abstract_Injector implements Injector_Interface
 {
     /** @var array<string, class-string<FactoryInterface>|FactoryInterface> */
     protected $factories = [];
-
     /** @var array<string, FactoryInterface> */
-    private array $factoryInstances = [];
-
-    private readonly ContainerInterface $container;
-
-    public function __construct(private readonly InjectorInterface $injector, ?ContainerInterface $container = null)
+    private array $factory_instances = [];
+    private readonly Container_Interface $container;
+    public function __construct(private readonly Injector_Interface $injector, ?Container_Interface $container = null)
     {
-        $this->container = $container ?: new DefaultContainer($this);
-
-        $this->loadFactoryList();
+        $this->container = $container ?: new Default_Container($this);
+        $this->load_factory_list();
     }
-
     /**
      * Init factory list
      */
-    abstract protected function loadFactoryList(): void;
-
-    private function setFactory(string $type, FactoryInterface $factory): void
+    abstract protected function load_factory_list(): void;
+    private function set_factory(string $type, Factory_Interface $factory): void
     {
-        $this->factoryInstances[$type] = $factory;
+        $this->factory_instances[$type] = $factory;
     }
-
     /**
      * @template T
      * @param string|class-string<T> $type
      * @return FactoryInterface<T>
      */
-    private function getFactory(string $type): FactoryInterface
+    private function get_factory(string $type): Factory_Interface
     {
-        if (isset($this->factoryInstances[$type])) {
-            return $this->factoryInstances[$type];
+        if (isset($this->factory_instances[$type])) {
+            return $this->factory_instances[$type];
         }
-
-        $factoryClass = $this->factories[$type];
-        $factory      = $factoryClass instanceof FactoryInterface ? $factoryClass : new $factoryClass();
-
-        $this->setFactory($type, $factory);
-
+        $factory_class = $this->factories[$type];
+        $factory = $factory_class instanceof Factory_Interface ? $factory_class : new $factory_class();
+        $this->set_factory($type, $factory);
         return $factory;
     }
-
-    public function canCreate(string $name): bool
+    public function can_create(string $name): bool
     {
-        if ($this->hasFactory($name)) {
+        if ($this->has_factory($name)) {
             return true;
         }
-        return $this->injector->canCreate($name);
+        return $this->injector->can_create($name);
     }
-
-    private function hasFactory(string $name): bool
+    private function has_factory(string $name): bool
     {
         return isset($this->factories[$name]);
     }
-
     /**
      * @template T of object
      * @param string|class-string<T> $name
@@ -80,10 +65,9 @@ abstract class AbstractInjector implements InjectorInterface
      */
     public function create(string $name, array $options = [])
     {
-        if ($this->hasFactory($name)) {
-            return $this->getFactory($name)->create($this->container, $options);
+        if ($this->has_factory($name)) {
+            return $this->get_factory($name)->create($this->container, $options);
         }
-
         return $this->injector->create($name, $options);
     }
 }

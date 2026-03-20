@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di\Resolver;
 
 use Laminas\Di\Exception\LogicException;
-use Psr\Container\ContainerInterface;
-
+use Psr\Container\Container_Interface;
 /**
  * Encapsulates the injection to perform for a parameter
  *
@@ -28,7 +26,7 @@ use Psr\Container\ContainerInterface;
  * @see TypeInjection                                    Implementation for injecting an instance of a specific type
  * @see ValueInjection                                   Implementation for injecting an existing value
  */
-interface InjectionInterface
+interface Injection_Interface
 {
     /**
      * Provides the actual value for injection, that will be passed to the constructor
@@ -37,8 +35,7 @@ interface InjectionInterface
      *
      * @return mixed The resulting injection value
      */
-    public function toValue(ContainerInterface $container);
-
+    public function to_value(Container_Interface $container);
     /**
      * Export the injection to PHP code
      *
@@ -47,7 +44,6 @@ interface InjectionInterface
      * @throws LogicException When the injection is not exportable.
      */
     public function export(): string;
-
     /**
      * Whether this injection can be exported as code or not
      *
@@ -58,5 +54,5 @@ interface InjectionInterface
      * When this method returns false, a call to `export()` should throw a
      * `Laminas\Di\Exception\LogicException`
      */
-    public function isExportable(): bool;
+    public function is_exportable(): bool;
 }

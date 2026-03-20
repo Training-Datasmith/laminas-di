@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di;
 
-use Psr\Container\ContainerInterface;
-
+use Psr\Container\Container_Interface;
 /**
  * Default IoC container implementation.
  *
@@ -13,7 +11,7 @@ use Psr\Container\ContainerInterface;
  *
  * @final
  */
-class DefaultContainer implements ContainerInterface
+class Default_Container implements Container_Interface
 {
     /**
      * Registered services and cached values
@@ -21,30 +19,29 @@ class DefaultContainer implements ContainerInterface
      * @var array<string, object>
      */
     protected $services = [];
-
-    public function __construct(/**
-     * Dependency injector
-     */
-        protected \Laminas\Di\InjectorInterface $injector
-    ) {
-        $this->services[InjectorInterface::class]  = $this->injector;
-        $this->services[ContainerInterface::class] = $this;
-        $this->services[$this->injector::class]          = $this->injector;
-        $this->services[static::class]             = $this;
+    public function __construct(
+        /**
+         * Dependency injector
+         */
+        protected \Laminas\Di\Injector_Interface $injector
+    )
+    {
+        $this->services[Injector_Interface::class] = $this->injector;
+        $this->services[Container_Interface::class] = $this;
+        $this->services[$this->injector::class] = $this->injector;
+        $this->services[static::class] = $this;
     }
-
     /**
      * Explicitly set a service
      *
      * @param string $name The name of the service retrievable by get()
      * @param object $service The service instance
      */
-    public function setInstance(string $name, $service): self
+    public function set_instance(string $name, $service): self
     {
         $this->services[$name] = $service;
         return $this;
     }
-
     /**
      * Check if a service is available
      *
@@ -57,10 +54,8 @@ class DefaultContainer implements ContainerInterface
         if (isset($this->services[$name])) {
             return true;
         }
-
-        return $this->injector->canCreate($name);
+        return $this->injector->can_create($name);
     }
-
     /**
      * Retrieve a service
      *
@@ -77,10 +72,9 @@ class DefaultContainer implements ContainerInterface
      */
     public function get($name)
     {
-        if (! isset($this->services[$name])) {
+        if (!isset($this->services[$name])) {
             $this->services[$name] = $this->injector->create($name);
         }
-
         return $this->services[$name];
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Di\CodeGenerator;
+declare (strict_types=1);
+namespace Laminas\Di\Code_Generator;
 
 use function array_keys;
 use function array_map;
@@ -10,23 +9,17 @@ use function assert;
 use function file_get_contents;
 use function implode;
 use function is_string;
-
-use Laminas\Di\ConfigInterface;
-
-use Laminas\Di\Definition\DefinitionInterface;
-use Laminas\Di\Resolver\DependencyResolverInterface;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
-use SplFileObject;
-
+use Laminas\Di\Config_Interface;
+use Laminas\Di\Definition\Definition_Interface;
+use Laminas\Di\Resolver\Dependency_Resolver_Interface;
+use Psr\Log\Logger_Interface;
+use Psr\Log\Null_Logger;
+use Spl_File_Object;
 use function sprintf;
 use function str_repeat;
 use function strtr;
-
 use Throwable;
-
 use function var_export;
-
 /**
  * Generator for the dependency injector
  *
@@ -38,27 +31,21 @@ use function var_export;
  *
  * @final This class should not be extended and will be marked final in version 4.0
  */
-class InjectorGenerator
+class Injector_Generator
 {
-    use GeneratorTrait;
-
+    use Generator_Trait;
     private const FACTORY_LIST_TEMPLATE = __DIR__ . '/../../templates/factory-list.template';
-    private const INJECTOR_TEMPLATE     = __DIR__ . '/../../templates/injector.template';
-    private const INDENTATION_SPACES    = 4;
-
+    private const INJECTOR_TEMPLATE = __DIR__ . '/../../templates/injector.template';
+    private const INDENTATION_SPACES = 4;
     /**
      * @deprecated
      *
      * @var DefinitionInterface|null
      */
     protected $definition;
-
     private string $namespace;
-
-    private FactoryGenerator $factoryGenerator;
-
-    private AutoloadGenerator $autoloadGenerator;
-
+    private Factory_Generator $factory_generator;
+    private Autoload_Generator $autoload_generator;
     /**
      * Constructs the compiler instance
      *
@@ -69,108 +56,68 @@ class InjectorGenerator
      * @param LoggerInterface|null        $logger An optional logger instance to log failures
      *            and processed classes.
      */
-    public function __construct(
-        private ConfigInterface $config,
-        DependencyResolverInterface $resolver,
-        ?string $namespace = null,
-        private ?LoggerInterface $logger = new NullLogger()
-    ) {
-        $this->namespace         = $namespace ?: 'Laminas\Di\Generated';
-        $this->factoryGenerator  = new FactoryGenerator($config, $resolver, $this->namespace . '\Factory');
-        $this->autoloadGenerator = new AutoloadGenerator($this->namespace);
-    }
-
-    private function buildFromTemplate(string $templateFile, string $outputFile, array $replacements): void
+    public function __construct(private Config_Interface $config, Dependency_Resolver_Interface $resolver, ?string $namespace = null, private ?Logger_Interface $logger = new Null_Logger())
     {
-        $template = file_get_contents($templateFile);
-
+        $this->namespace = $namespace ?: 'Laminas\Di\Generated';
+        $this->factory_generator = new Factory_Generator($config, $resolver, $this->namespace . '\Factory');
+        $this->autoload_generator = new Autoload_Generator($this->namespace);
+    }
+    private function build_from_template(string $template_file, string $output_file, array $replacements): void
+    {
+        $template = file_get_contents($template_file);
         assert(is_string($template));
-
         $code = strtr($template, $replacements);
-        $file = new SplFileObject($outputFile, 'w');
-
+        $file = new Spl_File_Object($output_file, 'w');
         $file->fwrite($code);
         $file->fflush();
     }
-
-    private function generateInjector(): void
+    private function generate_injector(): void
     {
-        assert(is_string($this->outputDirectory));
-
-        $this->buildFromTemplate(
-            self::INJECTOR_TEMPLATE,
-            sprintf('%s/GeneratedInjector.php', $this->outputDirectory),
-            [
-                '%namespace%' => $this->namespace ? "namespace {$this->namespace};\n" : '',
-            ]
-        );
+        assert(is_string($this->output_directory));
+        $this->build_from_template(self::INJECTOR_TEMPLATE, sprintf('%s/GeneratedInjector.php', $this->output_directory), ['%namespace%' => $this->namespace ? "namespace {$this->namespace};\n" : '']);
     }
-
     /**
      * @param array<string, string> $factories
      */
-    private function generateFactoryList(array $factories): void
+    private function generate_factory_list(array $factories): void
     {
         $indentation = sprintf("\n%s", str_repeat(' ', self::INDENTATION_SPACES));
-        $codeLines   = array_map(
-            static fn (string $key, string $value): string =>
-                sprintf('%s => %s,', var_export($key, true), var_export($value, true)),
-            array_keys($factories),
-            $factories
-        );
-
-        assert(is_string($this->outputDirectory));
-
-        $this->buildFromTemplate(self::FACTORY_LIST_TEMPLATE, sprintf('%s/factories.php', $this->outputDirectory), [
-            '%factories%' => implode($indentation, $codeLines),
-        ]);
+        $code_lines = array_map(static fn(string $key, string $value): string => sprintf('%s => %s,', var_export($key, true), var_export($value, true)), array_keys($factories), $factories);
+        assert(is_string($this->output_directory));
+        $this->build_from_template(self::FACTORY_LIST_TEMPLATE, sprintf('%s/factories.php', $this->output_directory), ['%factories%' => implode($indentation, $code_lines)]);
     }
-
     /**
      * @param array<string, string> $factories
      */
-    private function generateTypeFactory(string $class, array &$factories): void
+    private function generate_type_factory(string $class, array &$factories): void
     {
         if (isset($factories[$class])) {
             return;
         }
-
         $this->logger->debug(sprintf('Generating factory for class "%s"', $class));
-
         try {
-            $factory = $this->factoryGenerator->generate($class);
-
+            $factory = $this->factory_generator->generate($class);
             if ($factory) {
                 $factories[$class] = $factory;
             }
         } catch (Throwable $e) {
-            $this->logger->error(sprintf(
-                'Could not create factory for "%s": %s',
-                $class,
-                $e->getMessage()
-            ));
+            $this->logger->error(sprintf('Could not create factory for "%s": %s', $class, $e->get_message()));
         }
     }
-
-    private function generateAutoload(): void
+    private function generate_autoload(): void
     {
-        $addFactoryPrefix = static fn (string $value): string => 'Factory/' . $value;
-
-        $classmap = array_map($addFactoryPrefix, $this->factoryGenerator->getClassmap());
-
-        $classmap[$this->namespace . '\\GeneratedInjector'] = 'GeneratedInjector.php';
-
-        $this->autoloadGenerator->generate($classmap);
+        $add_factory_prefix = static fn(string $value): string => 'Factory/' . $value;
+        $classmap = array_map($add_factory_prefix, $this->factory_generator->get_classmap());
+        $classmap[$this->namespace . '\GeneratedInjector'] = 'GeneratedInjector.php';
+        $this->autoload_generator->generate($classmap);
     }
-
     /**
      * Returns the namespace this generator uses
      */
-    public function getNamespace(): string
+    public function get_namespace(): string
     {
         return $this->namespace;
     }
-
     /**
      * Generate the injector
      *
@@ -180,21 +127,18 @@ class InjectorGenerator
      */
     public function generate($classes = []): void
     {
-        $this->ensureOutputDirectory();
-        $this->factoryGenerator->setOutputDirectory($this->outputDirectory . '/Factory');
-        $this->autoloadGenerator->setOutputDirectory($this->outputDirectory);
+        $this->ensure_output_directory();
+        $this->factory_generator->set_output_directory($this->output_directory . '/Factory');
+        $this->autoload_generator->set_output_directory($this->output_directory);
         $factories = [];
-
         foreach ($classes as $class) {
-            $this->generateTypeFactory($class, $factories);
+            $this->generate_type_factory($class, $factories);
         }
-
-        foreach ($this->config->getConfiguredTypeNames() as $type) {
-            $this->generateTypeFactory($type, $factories);
+        foreach ($this->config->get_configured_type_names() as $type) {
+            $this->generate_type_factory($type, $factories);
         }
-
-        $this->generateAutoload();
-        $this->generateInjector();
-        $this->generateFactoryList($factories);
+        $this->generate_autoload();
+        $this->generate_injector();
+        $this->generate_factory_list($factories);
     }
 }

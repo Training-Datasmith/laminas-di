@@ -1,46 +1,36 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di;
 
 use function array_pop;
 use function class_exists;
 use function implode;
 use function in_array;
-
-use Laminas\Di\Definition\DefinitionInterface;
-use Laminas\Di\Exception\ClassNotFoundException;
-use Laminas\Di\Exception\InvalidCallbackException;
+use Laminas\Di\Definition\Definition_Interface;
+use Laminas\Di\Exception\Class_Not_Found_Exception;
+use Laminas\Di\Exception\Invalid_Callback_Exception;
 use Laminas\Di\Exception\RuntimeException;
-use Laminas\Di\Resolver\DependencyResolverInterface;
-
-use Laminas\Di\Resolver\InjectionInterface;
-use Laminas\Di\Resolver\TypeInjection;
-use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
-
+use Laminas\Di\Resolver\Dependency_Resolver_Interface;
+use Laminas\Di\Resolver\Injection_Interface;
+use Laminas\Di\Resolver\Type_Injection;
+use Psr\Container\Container_Interface;
+use Psr\Container\Not_Found_Exception_Interface;
 use function sprintf;
-
 /**
  * Dependency injector that can generate instances using class definitions and configured instance parameters
  *
  * @final
  */
-class Injector implements InjectorInterface
+class Injector implements Injector_Interface
 {
-    protected \Laminas\Di\Definition\DefinitionInterface $definition;
-
+    protected \Laminas\Di\Definition\Definition_Interface $definition;
     /** @var ContainerInterface */
     protected $container;
-
-    protected \Laminas\Di\Resolver\DependencyResolverInterface $resolver;
-
-    protected \Laminas\Di\ConfigInterface $config;
-
+    protected \Laminas\Di\Resolver\Dependency_Resolver_Interface $resolver;
+    protected \Laminas\Di\Config_Interface $config;
     /** @var string[] */
-    protected $instantiationStack = [];
-
+    protected $instantiation_stack = [];
     /**
      * Constructor
      *
@@ -53,18 +43,13 @@ class Injector implements InjectorInterface
      * @param DependencyResolverInterface|null $resolver A custom resolver instance to resolve dependencies.
      *      The default resolver is used when null is passed or the parameter is omitted
      */
-    public function __construct(
-        ?ConfigInterface $config = null,
-        ?ContainerInterface $container = null,
-        ?DefinitionInterface $definition = null,
-        ?DependencyResolverInterface $resolver = null
-    ) {
-        $this->definition = $definition ?: new Definition\RuntimeDefinition();
-        $this->config     = $config ?: new Config();
-        $this->resolver   = $resolver ?: new Resolver\DependencyResolver($this->definition, $this->config);
-        $this->setContainer($container ?: new DefaultContainer($this));
+    public function __construct(?Config_Interface $config = null, ?Container_Interface $container = null, ?Definition_Interface $definition = null, ?Dependency_Resolver_Interface $resolver = null)
+    {
+        $this->definition = $definition ?: new Definition\Runtime_Definition();
+        $this->config = $config ?: new Config();
+        $this->resolver = $resolver ?: new Resolver\Dependency_Resolver($this->definition, $this->config);
+        $this->set_container($container ?: new Default_Container($this));
     }
-
     /**
      * Set the ioc container
      *
@@ -72,42 +57,36 @@ class Injector implements InjectorInterface
      *
      * @return $this
      */
-    public function setContainer(ContainerInterface $container): static
+    public function set_container(Container_Interface $container): static
     {
-        $this->resolver->setContainer($container);
+        $this->resolver->set_container($container);
         $this->container = $container;
-
         return $this;
     }
-
-    public function getContainer(): ContainerInterface
+    public function get_container(): Container_Interface
     {
         return $this->container;
     }
-
     /**
      * Returns the class name for the requested type
      */
-    private function getClassName(string $type): string
+    private function get_class_name(string $type): string
     {
-        if ($this->config->isAlias($type)) {
-            return $this->config->getClassForAlias($type) ?? $type;
+        if ($this->config->is_alias($type)) {
+            return $this->config->get_class_for_alias($type) ?? $type;
         }
-
         return $type;
     }
-
     /**
      * Check if the given type name can be instantiated
      *
      * This will be the case if the name points to a class.
      */
-    public function canCreate(string $name): bool
+    public function can_create(string $name): bool
     {
-        $class = $this->getClassName($name);
+        $class = $this->get_class_name($name);
         return class_exists($class);
     }
-
     /**
      * Create the instance with auto wiring
      *
@@ -120,25 +99,17 @@ class Injector implements InjectorInterface
      */
     public function create(string $name, array $options = [])
     {
-        if (in_array($name, $this->instantiationStack)) {
-            throw new Exception\CircularDependencyException(sprintf(
-                'Circular dependency: %s -> %s',
-                implode(' -> ', $this->instantiationStack),
-                $name
-            ));
+        if (in_array($name, $this->instantiation_stack)) {
+            throw new Exception\Circular_Dependency_Exception(sprintf('Circular dependency: %s -> %s', implode(' -> ', $this->instantiation_stack), $name));
         }
-
-        $this->instantiationStack[] = $name;
-
+        $this->instantiation_stack[] = $name;
         try {
-            $instance = $this->createInstance($name, $options);
+            $instance = $this->create_instance($name, $options);
         } finally {
-            array_pop($this->instantiationStack);
+            array_pop($this->instantiation_stack);
         }
-
         return $instance;
     }
-
     /**
      * Retrieve a class instance based on the type name
      *
@@ -151,58 +122,39 @@ class Injector implements InjectorInterface
      * @throws InvalidCallbackException
      * @throws ClassNotFoundException
      */
-    protected function createInstance(string $name, array $params)
+    protected function create_instance(string $name, array $params)
     {
-        $class = $this->getClassName($name);
-
-        if (! $this->definition->hasClass($class)) {
-            $aliasMsg = $name !== $class ? ' (specified by alias ' . $name . ')' : '';
-            throw new ClassNotFoundException(sprintf(
-                'Class %s%s could not be located in provided definitions.',
-                $class,
-                $aliasMsg
-            ));
+        $class = $this->get_class_name($name);
+        if (!$this->definition->has_class($class)) {
+            $alias_msg = $name !== $class ? ' (specified by alias ' . $name . ')' : '';
+            throw new Class_Not_Found_Exception(sprintf('Class %s%s could not be located in provided definitions.', $class, $alias_msg));
         }
-
-        if (! class_exists($class)) {
-            throw new ClassNotFoundException(sprintf(
-                'Class by name %s does not exist',
-                $class
-            ));
+        if (!class_exists($class)) {
+            throw new Class_Not_Found_Exception(sprintf('Class by name %s does not exist', $class));
         }
-
-        $callParameters = $this->resolveParameters($name, $params);
-
+        $call_parameters = $this->resolve_parameters($name, $params);
         /**
          * @psalm-suppress MixedMethodCall
          * @psalm-var T
          */
-        return new $class(...$callParameters);
+        return new $class(...$call_parameters);
     }
-
     /**
      * @return mixed The value to inject into the instance
      */
-    private function getInjectionValue(InjectionInterface $injection)
+    private function get_injection_value(Injection_Interface $injection)
     {
-        $container      = $this->container;
-        $containerTypes = [
-            ContainerInterface::class,
+        $container = $this->container;
+        $container_types = [
+            Container_Interface::class,
             // Be backwards compatible with interop/container:
-            'Interop\Container\ContainerInterface', // phpcs:ignore
+            'Interop\Container\ContainerInterface',
         ];
-
-        if (
-            $injection instanceof TypeInjection
-            && ! $container->has((string) $injection)
-            && in_array((string) $injection, $containerTypes, true)
-        ) {
+        if ($injection instanceof Type_Injection && !$container->has((string) $injection) && in_array((string) $injection, $container_types, true)) {
             return $container;
         }
-
-        return $injection->toValue($container);
+        return $injection->to_value($container);
     }
-
     /**
      * Resolve parameters
      *
@@ -218,23 +170,17 @@ class Injector implements InjectorInterface
      *     injection.
      * @throws Exception\CircularDependencyException When a circular dependency is detected.
      */
-    private function resolveParameters(string $type, array $params = []): array
+    private function resolve_parameters(string $type, array $params = []): array
     {
-        $resolved    = $this->resolver->resolveParameters($type, $params);
-        $foundParams = [];
-
+        $resolved = $this->resolver->resolve_parameters($type, $params);
+        $found_params = [];
         foreach ($resolved as $injection) {
             try {
-                $foundParams[] = $this->getInjectionValue($injection);
-            } catch (NotFoundExceptionInterface $containerException) {
-                throw new Exception\UndefinedReferenceException(
-                    $containerException->getMessage(),
-                    (int) $containerException->getCode(),
-                    $containerException
-                );
+                $found_params[] = $this->get_injection_value($injection);
+            } catch (Not_Found_Exception_Interface $container_exception) {
+                throw new Exception\Undefined_Reference_Exception($container_exception->get_message(), (int) $container_exception->get_code(), $container_exception);
             }
         }
-
-        return $foundParams;
+        return $found_params;
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di;
 
 /**
@@ -31,11 +30,9 @@ class Module
      *
      * @return array{service_manager: DependencyConfigArray}
      */
-    public function getConfig(): array
+    public function get_config(): array
     {
-        $provider = new ConfigProvider();
-        return [
-            'service_manager' => $provider->getDependencyConfig(),
-        ];
+        $provider = new Config_Provider();
+        return ['service_manager' => $provider->get_dependency_config()];
     }
 }

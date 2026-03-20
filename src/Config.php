@@ -1,21 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di;
 
 use function array_filter;
-
 use function array_keys;
 use function array_map;
-
 use ArrayAccess;
-
 use function class_exists;
 use function interface_exists;
 use function is_array;
 use function is_string;
-
 /**
  * Provides a DI configuration from an array.
  *
@@ -87,14 +82,12 @@ use function is_string;
  *  parameters?: array<string, mixed>|null
  * }
  */
-class Config implements ConfigInterface
+class Config implements Config_Interface
 {
     /** @var array */
     protected $preferences = [];
-
     /** @var array<array> */
     protected array $types;
-
     /**
      * Construct from options array
      *
@@ -105,53 +98,42 @@ class Config implements ConfigInterface
      */
     public function __construct($options = [])
     {
-        $this->ensureArrayOrArrayAccess($options);
-        $this->preferences = $this->getDataFromArray($options, 'preferences');
-
+        $this->ensure_array_or_array_access($options);
+        $this->preferences = $this->get_data_from_array($options, 'preferences');
         /** @psalm-var array<array> Psalm does not catch the array filter with type predicate */
-        $this->types = array_filter($this->getDataFromArray($options, 'types'), is_array(...));
+        $this->types = array_filter($this->get_data_from_array($options, 'types'), is_array(...));
     }
-
-    private function getDataFromArray(\ArrayAccess|array $data, string $key): array
+    private function get_data_from_array(\ArrayAccess|array $data, string $key): array
     {
         /** @var mixed $result */
         $result = $data[$key] ?? [];
         return is_array($result) ? $result : [];
     }
-
     /**
      * {@inheritDoc}
      *
      * @see \Laminas\Di\ConfigInterface::getClassForAlias()
      */
-    public function getClassForAlias(string $name): ?string
+    public function get_class_for_alias(string $name): ?string
     {
-        if (
-            isset($this->types[$name]['typeOf'])
-            && is_string($this->types[$name]['typeOf'])
-            && (class_exists($this->types[$name]['typeOf']) || interface_exists($this->types[$name]['typeOf']))
-        ) {
+        if (isset($this->types[$name]['typeOf']) && is_string($this->types[$name]['typeOf']) && (class_exists($this->types[$name]['typeOf']) || interface_exists($this->types[$name]['typeOf']))) {
             return $this->types[$name]['typeOf'];
         }
-
         return null;
     }
-
     /**
      * Returns the instantiation parameters for the given type
      *
      * @param string $type The alias or class name
      * @return array<mixed> The configured parameters
      */
-    public function getParameters(string $type): array
+    public function get_parameters(string $type): array
     {
-        if (! isset($this->types[$type]['parameters']) || ! is_array($this->types[$type]['parameters'])) {
+        if (!isset($this->types[$type]['parameters']) || !is_array($this->types[$type]['parameters'])) {
             return [];
         }
-
         return $this->types[$type]['parameters'];
     }
-
     /**
      * {@inheritDoc}
      *
@@ -160,55 +142,46 @@ class Config implements ConfigInterface
      * @return $this
      * @param array<mixed> $params
      */
-    public function setParameters(string $type, array $params): static
+    public function set_parameters(string $type, array $params): static
     {
         $this->types[$type]['parameters'] = $params;
         return $this;
     }
-
-    public function getTypePreference(string $type, ?string $contextClass = null): ?string
+    public function get_type_preference(string $type, ?string $context_class = null): ?string
     {
-        if ($contextClass) {
-            return $this->getTypePreferenceForClass($type, $contextClass);
+        if ($context_class) {
+            return $this->get_type_preference_for_class($type, $context_class);
         }
-
-        if (! isset($this->preferences[$type])) {
+        if (!isset($this->preferences[$type])) {
             return null;
         }
-
         /** @var mixed $preference */
         $preference = $this->preferences[$type];
-
         return $preference !== '' ? (string) $preference : null;
     }
-
     /**
      * {@inheritDoc}
      *
      * @see \Laminas\Di\ConfigInterface::getTypePreferencesForClass()
      */
-    private function getTypePreferenceForClass(string $type, string $context): ?string
+    private function get_type_preference_for_class(string $type, string $context): ?string
     {
-        if (! isset($this->types[$context]['preferences'][$type])) {
+        if (!isset($this->types[$context]['preferences'][$type])) {
             return null;
         }
-
         /** @var mixed $preference */
         $preference = $this->types[$context]['preferences'][$type];
-
         return $preference !== '' ? (string) $preference : null;
     }
-
     /**
      * {@inheritDoc}
      *
      * @see ConfigInterface::isAlias()
      */
-    public function isAlias(string $name): bool
+    public function is_alias(string $name): bool
     {
         return isset($this->types[$name]['typeOf']);
     }
-
     /**
      * {@inheritDoc}
      *
@@ -216,47 +189,40 @@ class Config implements ConfigInterface
      *
      * @return list<string>
      */
-    public function getConfiguredTypeNames(): array
+    public function get_configured_type_names(): array
     {
         return array_map(strval(...), array_keys($this->types));
     }
-
-    public function setTypePreference(string $type, string $preference, ?string $context = null): self
+    public function set_type_preference(string $type, string $preference, ?string $context = null): self
     {
         if ($context) {
             /** @psalm-suppress MixedArrayAssignment TODO: Eliminate array structures with the next releases */
             $this->types[$context]['preferences'][$type] = $preference;
             return $this;
         }
-
         $this->preferences[$type] = $preference;
         return $this;
     }
-
     /**
      * @param string $name The name of the alias
      * @param string $class The class name this alias points to
      * @throws Exception\ClassNotFoundException When `$class` does not exist.
      */
-    public function setAlias(string $name, string $class): self
+    public function set_alias(string $name, string $class): self
     {
-        if (! class_exists($class) && ! interface_exists($class)) {
-            throw new Exception\ClassNotFoundException($class);
+        if (!class_exists($class) && !interface_exists($class)) {
+            throw new Exception\Class_Not_Found_Exception($class);
         }
-
         $this->types[$name]['typeOf'] = $class;
         return $this;
     }
-
     /**
      * @psalm-assert array|ArrayAccess $options
      */
-    private function ensureArrayOrArrayAccess(mixed $options): void
+    private function ensure_array_or_array_access(mixed $options): void
     {
-        if (! is_array($options) && ! $options instanceof ArrayAccess) {
-            throw new Exception\InvalidArgumentException(
-                'Config data must be of type array or ArrayAccess'
-            );
+        if (!is_array($options) && !$options instanceof ArrayAccess) {
+            throw new Exception\InvalidArgumentException('Config data must be of type array or ArrayAccess');
         }
     }
 }

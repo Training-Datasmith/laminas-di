@@ -1,19 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Di;
 
 use function class_exists;
 use function is_string;
-
-use Laminas\Di\Exception\InvalidServiceConfigException;
-use Psr\Container\ContainerInterface;
-
+use Laminas\Di\Exception\Invalid_Service_Config_Exception;
+use Psr\Container\Container_Interface;
 /**
  * @final
  */
-class GeneratedInjectorDelegator
+class Generated_Injector_Delegator
 {
     /**
      * @psalm-suppress MixedAssignment Laminas config is an untyped array - types should be ensured internally
@@ -21,26 +18,20 @@ class GeneratedInjectorDelegator
      * @param string $name
      * @param callable():InjectorInterface $callback
      */
-    public function __invoke(ContainerInterface $container, $name, callable $callback): InjectorInterface
+    public function __invoke(Container_Interface $container, $name, callable $callback): Injector_Interface
     {
-        $config    = $container->has('config') ? $container->get('config') : [];
-        $aotConfig = $config['dependencies']['auto']['aot'] ?? [];
-        $namespace = ! isset($aotConfig['namespace']) || $aotConfig['namespace'] === ''
-            ? 'Laminas\Di\Generated'
-            : $aotConfig['namespace'];
-
-        if (! is_string($namespace)) {
-            throw new InvalidServiceConfigException('Provided namespace is not a string.');
+        $config = $container->has('config') ? $container->get('config') : [];
+        $aot_config = $config['dependencies']['auto']['aot'] ?? [];
+        $namespace = !isset($aot_config['namespace']) || $aot_config['namespace'] === '' ? 'Laminas\Di\Generated' : $aot_config['namespace'];
+        if (!is_string($namespace)) {
+            throw new Invalid_Service_Config_Exception('Provided namespace is not a string.');
         }
-
-        $injector          = $callback();
-        $generatedInjector = $namespace . '\\GeneratedInjector';
-
-        if (class_exists($generatedInjector)) {
+        $injector = $callback();
+        $generated_injector = $namespace . '\GeneratedInjector';
+        if (class_exists($generated_injector)) {
             /** @psalm-var class-string<InjectorInterface> $generatedInjector */
-            return new $generatedInjector($injector);
+            return new $generated_injector($injector);
         }
-
         return $injector;
     }
 }

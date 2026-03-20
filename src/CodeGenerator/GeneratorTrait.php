@@ -1,33 +1,26 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Di\CodeGenerator;
+declare (strict_types=1);
+namespace Laminas\Di\Code_Generator;
 
 use function assert;
 use function is_dir;
-
 use function is_string;
-
-use Laminas\Di\Exception\GenerateCodeException;
+use Laminas\Di\Exception\Generate_Code_Exception;
 use Laminas\Di\Exception\LogicException;
-
 use function mkdir;
 use function sprintf;
-
 /**
  * Trait with generic generator utility methods
  *
  * @deprecated Since 3.16.0, the code generator will be replaced by a separate package in version 4.0
  */
-trait GeneratorTrait
+trait Generator_Trait
 {
     /** @var int */
     protected $mode = 0755;
-
     /** @var string|null */
-    protected $outputDirectory;
-
+    protected $output_directory;
     /**
      * Ensure that the given directory exists
      *
@@ -36,18 +29,13 @@ trait GeneratorTrait
      * @throws GenerateCodeException
      * @return void
      */
-    protected function ensureDirectory(string $dir)
+    protected function ensure_directory(string $dir)
     {
-        assert(is_string($this->outputDirectory));
-
-        if (! is_dir($dir) && ! mkdir($dir, $this->mode, true)) {
-            throw new GenerateCodeException(sprintf(
-                'Could not create output directory: %s',
-                $dir
-            ));
+        assert(is_string($this->output_directory));
+        if (!is_dir($dir) && !mkdir($dir, $this->mode, true)) {
+            throw new Generate_Code_Exception(sprintf('Could not create output directory: %s', $dir));
         }
     }
-
     /**
      * Ensures the existence of the output directory
      *
@@ -56,15 +44,13 @@ trait GeneratorTrait
      * @return void
      * @psalm-assert non-empty-string $this->outputDirectory
      */
-    protected function ensureOutputDirectory()
+    protected function ensure_output_directory()
     {
-        if (! $this->outputDirectory) {
+        if (!$this->output_directory) {
             throw new LogicException('Cannot generate code without output directory');
         }
-
-        $this->ensureDirectory($this->outputDirectory);
+        $this->ensure_directory($this->output_directory);
     }
-
     /**
      * Set the output directory
      *
@@ -77,19 +63,16 @@ trait GeneratorTrait
      * @param null|int $mode The creation mode for the directory
      * @return $this Provides a fluent interface
      */
-    public function setOutputDirectory(string $dir, ?int $mode = null): self
+    public function set_output_directory(string $dir, ?int $mode = null): self
     {
-        $this->outputDirectory = $dir;
-
+        $this->output_directory = $dir;
         if ($mode !== null) {
             $this->mode = $mode;
         }
-
         return $this;
     }
-
-    public function getOutputDirectory(): ?string
+    public function get_output_directory(): ?string
     {
-        return $this->outputDirectory;
+        return $this->output_directory;
     }
 }
