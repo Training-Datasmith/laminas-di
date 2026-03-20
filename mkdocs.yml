@@ -33,7 +33,7 @@ extra:
         - v3
         - v2
     installation:
-        config_provider_class: 'Laminas\Di\ConfigProvider'
+        config_provider_class: 'Laminas\Di\Config_Provider'
         module_class: 'Laminas\Di\Module'
 plugins:
     - search

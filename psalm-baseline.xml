@@ -94,9 +94,9 @@
   </file>
   <file src="src/ConfigProvider.php">
     <DeprecatedClass>
-      <code><![CDATA[CodeGenerator\InjectorGenerator::class]]></code>
-      <code><![CDATA[CodeGenerator\InjectorGenerator::class]]></code>
-      <code><![CDATA[Container\GeneratorFactory::class]]></code>
+      <code><![CDATA[Code_Generator\Injector_Generator::class]]></code>
+      <code><![CDATA[Code_Generator\Injector_Generator::class]]></code>
+      <code><![CDATA[Container\Generator_Factory::class]]></code>
     </DeprecatedClass>
   </file>
   <file src="src/Container/AutowireFactory.php">
