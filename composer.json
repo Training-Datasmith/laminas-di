@@ -45,7 +45,7 @@
         "phpunit/phpunit": "^11.0",
         "psalm/plugin-phpunit": "^0.18.0 || ^0.19.0",
         "squizlabs/php_codesniffer": "^3.7.1",
-        "vimeo/psalm":"^6.0"
+        "vimeo/psalm": "^6.0"
     },
     "conflict": {
         "zendframework/zend-di": "*",
@@ -63,8 +63,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "LaminasTest\\Di\\": "test/",
-            "LaminasBench\\Di\\": "benchmarks/"
+            "Laminas_Test\\Di\\": "test/",
+            "Laminas_Bench\\Di\\": "benchmarks/"
         }
     },
     "scripts": {
